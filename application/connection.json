@@ -1,0 +1,83 @@
+{
+    "name": "basic-network",
+    "version": "1.0.0",
+    "client": {
+        "organization": "Cert",
+        "connection": {
+            "timeout": {
+                "peer": {
+                    "endorser": "300"
+                },
+                "orderer": "300"
+            }
+        }
+    },
+    "channels": {
+        "channelprog": {
+            "orderers": [
+                "orderer1.freelancerDomain.com"
+            ],
+            "peers": {
+                "peer0.cert.freelancerDomain.com": {}
+            }
+        }
+    },
+    "organizations": {
+        "Cert": {
+            "mspid": "CertOrg",
+            "peers": [
+                "peer0.cert.freelancerDomain.com"
+            ],
+            "certificateAuthorities": [
+                "ca.cert.freelancerDomain.com"
+            ],
+            "adminPrivateKey": {
+                "path":"../../basic-network/crypto-config/peerOrganizations/cert.freelancerDomain.com/users/Admin@cert.freelancerDomain.com/msp/keystore/1c4830920240ce8d3bec6423f135c3735af3fd2eab294b716de510b9a629466a_sk"
+            },
+            "signedCert":{
+                "path":"../../basic-network/crypto-config/peerOrganizations/cert.freelancerDomain.com/users/Admin@cert.freelancerDomain.com/msp/signcerts/Admin@cert.freelancerDomain.com-cert.pem"
+            }
+        }
+    },
+    "orderers": {
+        "orderer1.freelancerDomain.com": {
+            "url": "grpc://localhost:7050",
+            "grpcOptions":{
+                "ssl-target-name-override":"orderer1.freelancerDomain.com",
+                "grpc-max-send-message-length": -1
+            },
+            "tlsCACerts": {
+                "path": "../../basic-network/crypto-config/ordererOrganizations/freelancerDomain.com/orderers/orderer1.freelancerDomain.com/msp/tlscacerts/tlsca.freelancerDomain.com-cert.pem"
+            }
+        }
+    },
+    "peers": {
+        "peer0.cert.freelancerDomain.com": {
+            "url": "grpc://localhost:7051",
+            "tlsCACerts": {
+                "path": "../../basic-network/crypto-config/peerOrganizations/cert.freelancerDomain.com/peers/peer0.cert.freelancerDomain.com/msp/tlscacerts/tlsca.cert.freelancerDomain.com-cert.pem"
+            },
+            "grpcOptions": {
+                "ssl-target-name-override": "peer1.cert.freelancerDomain.com",
+                "hostnameOverride": "peer1.cert.freelancerDomain.com"
+            }
+        }
+    },
+    "certificateAuthorities": {
+        "ca.cert.freelancerDomain.com": {
+            "url": "https://localhost:7054",
+            "caName": "ca.cert.freelancerDomain.com",
+            "tlsCACerts": {
+                "path": "../../basic-network/crypto-config/peerOrganizations/cert.freelancerDomain.com/ca/ca.cert.freelancerDomain.com-cert.pem"
+            },
+            "registrar":{
+                "enrollId": "admin",
+                "enrollSecret": "adminpw",
+                "caName": "cacert"
+            },
+            "httpOptions": {
+                "verify": false
+            }
+        }
+    }
+}

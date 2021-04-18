@@ -1,0 +1,81 @@
+Organizations:
+
+    - &OrdererOrg
+        Name: OrdererOrg
+        ID: OrdererOrg
+        MSPDir: crypto-config/ordererOrganizations/freelancerDomain.com/msp
+
+    - &ProgOrg
+        Name: ProgOrg
+        ID: ProgOrg
+        MSPDir: crypto-config/peerOrganizations/prog.freelancerDomain.com/msp
+        AnchorPeers:
+            - Host: peer0.prog.freelancerDomain.com
+              Port: 7051
+    - &DesignOrg
+        Name: DesignOrg
+        ID: DesignOrg
+        MSPDir: crypto-config/peerOrganizations/design.freelancerDomain.com/msp
+        AnchorPeers:
+            - Host: peer0.design.freelancerDomain.com
+              Port: 7051
+
+    - &CertOrg
+        Name: CertOrg
+        ID: CertOrg
+        MSPDir: crypto-config/peerOrganizations/cert.freelancerDomain.com/msp
+        AnchorPeers:
+            - Host: peer0.cert.freelancerDomain.com
+              Port: 7051
+
+Orderer: &OrdererDefaults
+
+    OrdererType: kafka
+    Addresses:
+        - orderer1.freelancerDomain.com:7050
+        - orderer2.freelancerDomain.com:7050
+    BatchTimeout: 2s
+    BatchSize:
+        MaxMessageCount: 10
+        AbsoluteMaxBytes: 99 MB
+        PreferredMaxBytes: 512 KB
+    Kafka:
+        Brokers:
+            - kafka1.freelancerDomain.com:9092
+            - kafka2.freelancerDomain.com:9092
+            - kafka3.freelancerDomain.com:9092
+            - kafka4.freelancerDomain.com:9092
+
+    Organizations:
+
+Application: &ApplicationDefaults
+    Organizations:
+
+Profiles:
+
+    OrdererGenesis:
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *OrdererOrg
+        Consortiums:
+            SampleConsortium:
+                Organizations:
+                    - *ProgOrg
+                    - *DesignOrg
+                    - *CertOrg
+    Channel1:
+        Consortium: SampleConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *ProgOrg
+                - *CertOrg
+    
+    Channel2:
+        Consortium: SampleConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *DesignOrg
+                - *CertOrg

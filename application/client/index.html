@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hyperledger Fabric Freelancer Application</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+    <style type="text/css">
+      header{
+        background-color: rgb(245, 191, 191);
+        font-size:20px;
+        padding:20px;
+      }
+      header, .form-group{
+        margin-bottom: 3%;
+      }
+      .form-group{
+        width:50%;
+      }
+      #body{
+        margin-left:3%;
+        margin-right:3%;
+      }
+      .form-control{
+        margin: 8px;
+      }
+       #right_header{
+        width:20%;
+        font-size:15px;
+        margin-right:0px;
+      }
+      #left_header{
+        margin-left:0;
+        width:40%;
+        display:inline-block;
+      } 
+      #id {
+        width:49%;
+        display: inline-block;
+      }
+      table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+      }
+      td, th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+      }
+      tr:nth-child(even) {
+          background-color: #dddddd;
+      }
+    </style>
+  </head>
+ <body ng-app="application" ng-controller="AppCtrl">
+    <header>
+      <div id="left_header">Hyperledger Fabric Freelancer Platform Application</div>
+    </header>
+    <div id="body">
+      <div class="form-group">
+          <h9 style="color:rgb(70, 126, 70);margin-bottom:2%" id="success_getwallet">{{search_wallet}}</h9><br>
+          <label>지갑 검색</label>
+          <p><input class="form-control" type="text" placeholder="Ex: 1Q2W3E4R" ng-model="walletid">
+          <input id="getWallet" type="submit" value="검색" class="btn btn-primary" ng-click="getWallet()"></p>
+      </div>
+    <br><br><br><br><br><br>
+
+    <div class="form-group">
+      <h9 style="color:rgb(70, 126, 70);margin-bottom:2%" id="success_getJobPosting">Success query</h9><br>
+      <label>구인 공고 게시판</label>
+      <p><input id="getJobPosting" type="submit" value="검색" class="btn btn-primary" ng-click="getJobPosting()"></p>
+    </div>
+    <div class="form-group">
+      <p><input class="form-control" type="text" placeholder="아이디" ng-model="dockey">
+      <p><input class="form-control" type="text" placeholder="패스워드" ng-model="psword">   
+<table id="getJobPosting" class="table" align="center">
+        <tr>
+          <th>모집분야</th>
+          <th>회사명</th>
+          <th>요구조건</th>
+          <th>보수 (만원)</th>
+          <th>계약기간</th>
+          <th>지원</th>
+        </tr>
+        <tr ng-repeat="freelancer in getJobPosting">
+          <td>{{freelancer.filed}}</td>
+          <td>{{freelancer.c_name}}</td>
+          <td>{{freelancer.requirement}}</td>
+          <td>{{freelancer.remuneration}}</td>
+          <td>{{freelancer.contractperiod}}</td>
+          <td><input id="setApply" type="submit" value="지원하기" ng-click="setApply(dockey,psword,freelancer.Key)"></td></p>
+        </tr>
+        <h5 style="color:green;margin-bottom:2%" id="success_getJobPosting">{{Apply_Success}}</h5>
+      </table>
+    </div>  
+    <br><br><br><br><br><br>
+            
+
+ <div class="form-group">
+        <label>구인공고 게시</label>
+        <h5 style="color:green;margin-bottom:2%" id="success_setjobposting">{{create_offer}}</h5>
+        <br>
+        모집분야: <input class="form-control" type="text" placeholder="Ex: Golang Programmer" ng-model="offer.field">
+        아이디: <input class="form-control" type="text" placeholder="Ex: IBM" ng-model="offer.name">
+        비밀번호: <input class="form-control" type="text" placeholder="비밀번호" ng-model="offer.psword">
+        요구조건: <input class="form-control" type="text" placeholder="Ex: Hyper" ng-model="offer.conditions">
+        보수: <input class="form-control" type="text" placeholder="Ex: 20" ng-model="offer.pay"> 
+        계약기간: <input class="form-control" type="text" placeholder="Ex: 5T6Y7U8I" ng-model="offer.endDate">
+        <input id="setJobPosting" type="submit" value="게시하기" class="btn btn-primary" ng-click="setJobPosting()"> 
+      </div>
+      <br><br><br><br><br><br>
+
+ 
+
+ <div class="form-group">
+        <label>평점주기</label>
+        
+        <h5 style="color:green;margin-bottom:2%" id="success_setRating ">{{set_rating}}</h5>
+        <br>
+        아이디: <input class="form-control" type="text" placeholder="아이디 입력" ng-model="Offer.companykey">
+        비밀번호: <input class="form-control" type="text" placeholder="비밀번호 입력" ng-model="Offer.psword">
+        평점: <input class="form-control" type="text" placeholder="0점 ~ 5점 " ng-model="Offer.rating">
+        구인공고 키: <input class="form-control" type="text" placeholder="구인공고 키 입력" ng-model="Offer.jobpostingkey">
+        프리랜서 키: <input class="form-control" type="text" placeholder="프리랜서 키 입력" ng-model="Offer.freelancerkey">
+        <input id="setRating" type="submit" value="제출하기" class="btn btn-primary" ng-click="setRating()">
+      </div>
+    <br><br><br><br><br><br>
+
+    </div>
+  </body>
+  <script type="text/javascript" src="app.js"> </script>
+</html>

@@ -1,0 +1,42 @@
+OrdererOrgs:
+  - Name: Orderer
+    Domain: freelancerDomain.com
+    Specs:
+      - Hostname: orderer1
+      - Hostname: orderer2
+
+PeerOrgs:
+  - Name: Prog
+    Domain: prog.freelancerDomain.com
+    Template:
+      Count: 3
+    Users:
+      Count: 1
+
+  - Name: CompanyProg
+    Domain: companyprog.freelancerDomain.com
+    Template:
+      Count: 1
+    Users:
+      Count: 1
+
+  - Name: Design
+    Domain: design.freelancerDomain.com
+    Template:
+      Count: 3
+    Users:
+      Count: 1
+
+  - Name: CompanyDesign
+    Domain: companydesign.freelancerDomain.com
+    Template:
+      Count: 1
+    Users:
+      Count: 1
+
+  - Name: Cert
+    Domain: cert.freelancerDomain.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1
