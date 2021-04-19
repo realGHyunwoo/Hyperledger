@@ -643,20 +643,21 @@ func (s *SmartContract) setFreelancer(APIstub shim.ChaincodeStubInterface, args 
    }
 
    var tempIdx = 0
-   var workersocre = 0
-   var score = 0
+   var workersocre = 0.0
+   var score = 0.0
 
    for Idx, val := range offer.Volunteer {
-      grade, _ := strconv.Atoi(val.Grade)
-      cnt, _ := strconv.Atoi(val.Count)
+
+      grade, _ := strconv.ParseFloat(val.Grade, 64)
+      cnt, _ := strconv.ParseFloat(val.Count, 64)
       if grade == 0 || cnt == 0 {
-         score = 0
+         score = 0.0
       } else {
          score = grade / cnt
       }
       if score >= workersocre {
          tempIdx = Idx
-         workersocre = (score)
+         workersocre = score
       }
    }
 
@@ -713,15 +714,13 @@ func (s *SmartContract) verifyConditions(APIstub shim.ChaincodeStubInterface, ar
 
    for key, values := range offer.Requirement {
       val, exists := document.Certification[key]
-      if !exists {
-         return shim.Error("You don't have " + key)
-      }
       if key == "TOEIC" {
          offval, _ := strconv.Atoi(values)
          teerval, _ := strconv.Atoi(val)
          if offval > teerval {
             return shim.Error("You lack the grade of " + key)
          }
+         continue
       } else if key == "Rating" {
          wokeCount, _ := strconv.ParseFloat(document.Count, 64)
          workgrade, _ := strconv.ParseFloat(document.Grade, 64)
@@ -733,12 +732,14 @@ func (s *SmartContract) verifyConditions(APIstub shim.ChaincodeStubInterface, ar
          if rate > grade {
             return shim.Error("Bye")
          }
+         continue
       } else if key == "Count" {
          wantcount, _ := strconv.Atoi(val)
          workcount, _ := strconv.Atoi(document.Count)
          if wantcount > workcount {
             return shim.Error("Bye")
          }
+         continue
       } else if key == "OPIC" {
          opicGrade := [7]string{"NL", "NM", "NH", "IL", "IM", "IH", "AL"}
          var workgrade int
@@ -754,6 +755,10 @@ func (s *SmartContract) verifyConditions(APIstub shim.ChaincodeStubInterface, ar
          if wantgrade > workgrade {
             return shim.Error("Byte")
          }
+         continue
+      }
+      if !exists {
+         return shim.Error("You don't have " + key)
       }
    }
 
