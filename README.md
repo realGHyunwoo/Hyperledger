@@ -80,7 +80,6 @@ func (s *SmartContract) setWallet(APIstub shim.ChaincodeStubInterface, args []st
 
 #### 2.2 동작 흐름도
 
-
 ![](./images/flow.png)
 
 ---
@@ -103,7 +102,7 @@ func (s *SmartContract) setWallet(APIstub shim.ChaincodeStubInterface, args []st
 
 ## 2. **웹 상에서 구현한 함수 목록**
 
-![](/2.png)
+![](./images/2.png)
 
 <br>
 
