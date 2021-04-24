@@ -158,6 +158,7 @@ func (s *SmartContract) setWallet(APIstub shim.ChaincodeStubInterface, args []st
 | freelancerKey2 | GildongHong  |  fabric  |              CCNP, 정보보안기사, OPIC IM              |
 
 <br>
+
 #### 5.2 setApply 구현
 ##### 요구조건에 충족하지 못하거나 ID/PW를 통해 본인의 자격정보임을 인증하지 못할 시 에러를 반환한다
 
@@ -207,4 +208,4 @@ func (s *SmartContract) setWallet(APIstub shim.ChaincodeStubInterface, args []st
 
 ---
 
-#기대효과
+# 기대효과
