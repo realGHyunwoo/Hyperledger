@@ -80,15 +80,16 @@ func (s *SmartContract) setWallet(APIstub shim.ChaincodeStubInterface, args []st
 
 #### 2.2 동작 흐름도
 
+
 ![](./images/flow.png)
 
 ---
 
-#개발결과 테스트
+# 개발결과 테스트
 
 ##### 개발환경 및 테스트에 필요한 초기값을 설정하고 기업이 원하는 조건에 맞는 프리랜서를 고용하는 과정에 대한 설명
 
-##1. 개발 환경
+## 1. 개발 환경
 
 |     구분     | 버전 또는 툴                           |
 | :----------: | :------------------------------------- |
@@ -100,13 +101,13 @@ func (s *SmartContract) setWallet(APIstub shim.ChaincodeStubInterface, args []st
 | **컨테이너** | Docker 20.10.5, Docker-Composer 1.26.0 |
 | **블록체인** | Hyperledger Fabric 1.4                 |
 
-##2. **웹 상에서 구현한 함수 목록**
+## 2. **웹 상에서 구현한 함수 목록**
 
 ![](/2.png)
 
 <br>
 
-##3. 테스트 전 초기값 설정
+## 3. 테스트 전 초기값 설정
 
 |  참여개체  |     이름     |    아이디    | 비밀번호 | 보유토큰 |
 | :--------: | :----------: | :----------: | :------: | :------: |
@@ -123,7 +124,7 @@ func (s *SmartContract) setWallet(APIstub shim.ChaincodeStubInterface, args []st
 ![](./images/22.png)
 ![](./images/3.png)
 
-##4. 구인공고 게시
+## 4. 구인공고 게시
 
 ##### 테스트를 위해 아래 테이블의 구인공고를 4.1의 방법으로 사전에 생성함
 
@@ -141,7 +142,7 @@ func (s *SmartContract) setWallet(APIstub shim.ChaincodeStubInterface, args []st
 
 ---
 
-##5. 구인공고 게시판 조회 및 지원하기
+## 5. 구인공고 게시판 조회 및 지원하기
 
 ##### 구인공고 게시판을 통해 구인공고 목록을 확인 할 수 있으며 프리랜서는 자신이 원하는 곳에 지원할 수 있음
 
