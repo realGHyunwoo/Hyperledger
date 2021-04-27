@@ -86,7 +86,7 @@ func (s *SmartContract) setWallet(APIstub shim.ChaincodeStubInterface, args []st
 
 # 개발결과 테스트
 
-##### 개발환경 및 테스트에 필요한 초기값을 설정하고 기업이 원하는 조건에 맞는 프리랜서를 고용하는 과정에 대한 설명
+##### 개발환경 및 테스트에 필요한 초깃값을 설정하고 기업이 원하는 조건에 맞는 프리랜서를 고용하는 과정에 대한 설명
 
 ## 1. 개발 환경
 
