@@ -204,7 +204,7 @@ func (s *SmartContract) setWallet(APIstub shim.ChaincodeStubInterface, args []st
 
 ##### 평점이 업데이트 되었고 참여 횟수 또한 10에서 11로 증가한 것을 확인 할 수 있음
 
-![](./images/update3.png)
+![](./images/update4.png)
 
 ---
 
