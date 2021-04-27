@@ -164,11 +164,11 @@ func (s *SmartContract) setWallet(APIstub shim.ChaincodeStubInterface, args []st
 
 ##### 5.2.1 요구조건에 충족하지 못하는 경우
 
-![](./images/error.png)
+
 
 ##### 위의 그림과 같이 요구조건을 충족하지 못하는 경우는 체인코드상에서 아래와 같은 에러를 반환한다
 
-![](./images/applyError.png)
+![](./images/error.png)
 
 <br>
 
