@@ -234,7 +234,7 @@ func (s *SmartContract) setCertificate(APIstub shim.ChaincodeStubInterface, args
    }
    // Freelancer의 문서 Key생성
 
-   walletid, psword, university_code, certification := args[0], args[1], args[2], args[3]
+   walletkey, psword, university_code, certification := args[0], args[1], args[2], args[3]
 
    var docskey = DocsKey{}
    json.Unmarshal(generateKey(APIstub, "latestKey"), &docskey)
@@ -263,14 +263,14 @@ func (s *SmartContract) setCertificate(APIstub shim.ChaincodeStubInterface, args
 
    var document = Document{}
    if len(args) == 6 {
-      document.WalletID = walletid
+      document.WalletID = walletkey
       document.PSWORD = psStr
       document.University_code = university_code
       document.Certification = certificate
       document.Grade = args[4]
       document.Count = args[5]
    } else if len(args) == 4 {
-      document.WalletID = walletid
+      document.WalletID = walletkey
       document.PSWORD = psStr
       document.University_code = university_code
       document.Certification = certificate
@@ -311,10 +311,10 @@ func (s *SmartContract) getCertificate(APIstub shim.ChaincodeStubInterface, args
    document := Document{}
    json.Unmarshal(documentAsBytes, &document)
 
-   wokeCount, _ := strconv.ParseFloat(document.Count, 64)
+   workCount, _ := strconv.ParseFloat(document.Count, 64)
    workgrade, _ := strconv.ParseFloat(document.Grade, 64)
 
-   var grade float64 = workgrade / wokeCount
+   var grade float64 = workgrade / workCount
 
    var s2 string
    s2 = strconv.FormatFloat(grade, 'f', 1, 64) // f, fmt, prec, bitSize
@@ -441,7 +441,7 @@ func (s *SmartContract) updateCertificate(APIstub shim.ChaincodeStubInterface, a
 func (s *SmartContract) updateRating(APIstub shim.ChaincodeStubInterface, args []string) pb.Response {
 
    var workerToken int
-   var wokeCount int
+   var workCount int
    var companyToken int
    var requirepay int
    var workgrade int
@@ -466,20 +466,20 @@ func (s *SmartContract) updateRating(APIstub shim.ChaincodeStubInterface, args [
    json.Unmarshal(documentAsBytes, &document)
 
    // get Freelancer token
-   walletAsBytes, err := APIstub.GetState(document.WalletID)
+   workerwalletAsBytes, err := APIstub.GetState(document.WalletID)
    if err != nil {
       fmt.Println(err.Error())
-   } else if walletAsBytes == nil {
+   } else if workerwalletAsBytes == nil {
       return shim.Error("Could not Find ID")
    }
 
    wallet := Wallet{}
-   json.Unmarshal(walletAsBytes, &wallet)
+   json.Unmarshal(workerwalletAsBytes, &wallet)
 
    companywalletAsBytes, err := APIstub.GetState(companywalletKey)
    if err != nil {
       fmt.Println(err.Error())
-   } else if walletAsBytes == nil {
+   } else if companywalletAsBytes == nil {
       return shim.Error("Could not Find ID")
    }
 
@@ -501,15 +501,15 @@ func (s *SmartContract) updateRating(APIstub shim.ChaincodeStubInterface, args [
    comwalletUpdate, _ := json.Marshal(comwallet)
    APIstub.PutState(companywalletKey, comwalletUpdate)
 
-   wokeCount, _ = strconv.Atoi(document.Count)
-   wokeCount += 1
+   workCount, _ = strconv.Atoi(document.Count)
+   workCount += 1
    workgrade, _ = strconv.Atoi(document.Grade)
    addgrade, _ = strconv.Atoi(grade)
 
    workgrade += addgrade
 
    document.Grade = strconv.Itoa(workgrade)
-   document.Count = strconv.Itoa(wokeCount)
+   document.Count = strconv.Itoa(workCount)
 
    docsUpdate, _ := json.Marshal(document)
    APIstub.PutState(workerDocskey, docsUpdate)
@@ -635,11 +635,11 @@ func (s *SmartContract) setFreelancer(APIstub shim.ChaincodeStubInterface, args 
    }
 
    if len(offer.Volunteer) == 0 {
-      return shim.Error("zero")
+      return shim.Error("No applicants are available")
    }
 
    if time.Since(offer.Timestamp) < 36000 {
-      return shim.Error("today not setFreelancer")
+      return shim.Error("Not today setFreelancer")
    }
 
    var tempIdx = 0
@@ -690,10 +690,10 @@ func (s *SmartContract) verifyConditions(APIstub shim.ChaincodeStubInterface, ar
       return shim.Error("Incorrect number of arguments. Expecting 2")
    }
 
-   docskey, offerkey := args[0], args[1]
+   documentKey, offerkey := args[0], args[1]
 
    // cc1 invoke
-   verifyConditionsResponse := s.returnCertificate(APIstub, []string{docskey})
+   verifyConditionsResponse := s.returnCertificate(APIstub, []string{documentKey})
    if verifyConditionsResponse.GetStatus() >= 400 {
       return shim.Error(fmt.Sprintf("failed to bringDocument err : %s", verifyConditionsResponse.GetMessage()))
    }
@@ -718,7 +718,7 @@ func (s *SmartContract) verifyConditions(APIstub shim.ChaincodeStubInterface, ar
          offval, _ := strconv.Atoi(values)
          teerval, _ := strconv.Atoi(val)
          if offval > teerval {
-            return shim.Error("You lack the grade of " + key)
+            return shim.Error("You don't have enough scores")
          }
          continue
       } else if key == "Rating" {
@@ -730,14 +730,14 @@ func (s *SmartContract) verifyConditions(APIstub shim.ChaincodeStubInterface, ar
          var grade float64 = workgrade / wokeCount
 
          if rate > grade {
-            return shim.Error("Bye")
+            return shim.Error("You don't have enough" + key)
          }
          continue
       } else if key == "Count" {
-         wantcount, _ := strconv.Atoi(val)
+         wantcount, _ := strconv.Atoi(values)
          workcount, _ := strconv.Atoi(document.Count)
          if wantcount > workcount {
-            return shim.Error("Bye")
+            return shim.Error("You don't have enough" + key)
          }
          continue
       } else if key == "OPIC" {
@@ -753,7 +753,7 @@ func (s *SmartContract) verifyConditions(APIstub shim.ChaincodeStubInterface, ar
             }
          }
          if wantgrade > workgrade {
-            return shim.Error("Byte")
+            return shim.Error("You don't have enough" + key + "Grade")
          }
          continue
       }
@@ -792,7 +792,7 @@ func (s *SmartContract) setRating(APIstub shim.ChaincodeStubInterface, args []st
    check, _ := strconv.Atoi(workerGrade)
 
    if check > 5 && check < 0 {
-      return shim.Error("0<= grade <=5")
+      return shim.Error("between 0~5")
    }
 
    offer := Offer{}
@@ -821,9 +821,9 @@ func (s *SmartContract) setRating(APIstub shim.ChaincodeStubInterface, args []st
       return shim.Error("This is not the person you hired")
    }
 
-   // if !offer.State {
-   //    return shim.Error("you not hired worker")
-   // }
+   if !offer.State {
+      return shim.Error("you not hired worker")
+   }
 
    // 평점 업데이트
    result := s.updateRating(APIstub, []string{docsKey, CompanyWallet, workerGrade, offer.Remuneration})
